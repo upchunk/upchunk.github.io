@@ -9,8 +9,7 @@ Live: https://upchunk.github.io
 Plain HTML, CSS and vanilla JavaScript. No build step, so GitHub Pages serves it directly.
 
 ```
-index.html        # content
-style.css         # styles, dark/light theme, animations
+index.html        # content + inlined CSS (dark/light theme, layout, animations)
 main.js           # typing effect, scroll reveal, project filters, theme toggle
 og.png            # social preview image (LinkedIn, WhatsApp, X)
 robots.txt, sitemap.xml  # search engine indexing
