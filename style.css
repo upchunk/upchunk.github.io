@@ -376,3 +376,6 @@ h2 .num { margin-right: 12px; vertical-align: 0.35em; }
 .p-actions .p-link { align-self: center; }
 .project .tags { margin-top: auto; }
 .timeline::before { top: 14px; }
+.inline-link { color: var(--accent-2); text-decoration: underline; text-underline-offset: 2px; }
+.cs-cite { margin-top: 6px; font-size: 0.82rem !important; font-style: normal; border-left: 2px solid var(--accent); padding-left: 12px; }
+.cs:focus, .cs:focus-visible { outline: none; }

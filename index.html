@@ -41,6 +41,14 @@
         "sameAs": ["https://www.linkedin.com/in/upchunk", "https://github.com/upchunk"]
       },
       {
+        "@type": "ScholarlyArticle",
+        "headline": "Klasifikasi Gerakan Cuci Tangan Berbasis Convolutional Neural Network (CNN)",
+        "author": [{ "@id": "https://upchunk.github.io/#person" }, { "@type": "Person", "name": "Eko Mulyanto Yuniarno" }, { "@type": "Person", "name": "Reza Fuad Rachmadi" }],
+        "datePublished": "2021",
+        "isPartOf": { "@type": "Periodical", "name": "Jurnal Teknik ITS" },
+        "sameAs": ["https://doi.org/10.12962/j23373539.v10i2.75377", "https://www.neliti.com/publications/501150/klasifikasi-gerakan-cuci-tangan-berbasis-convolutional-neural-network-cnn"]
+      },
+      {
         "@type": "ProfessionalService",
         "name": "Habi — AI & Software Engineering",
         "url": "https://upchunk.github.io/#work-with-me",
@@ -57,7 +65,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" /></noscript>
-  <link rel="stylesheet" href="style.css?v=fc3b4d8b" />
+  <link rel="stylesheet" href="style.css?v=2c87e396" />
   <script>
     document.documentElement.classList.add('js');
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
@@ -321,13 +329,15 @@
         </article>
 
         <article class="project card reveal" data-cat="ai">
-          <div class="p-head"><span class="p-icon" aria-hidden="true">✋</span><span class="p-org">Undergraduate thesis · 2021</span></div>
+          <div class="p-head"><span class="p-icon" aria-hidden="true">✋</span><span class="p-org">Published paper · Jurnal Teknik ITS · 2021</span></div>
           <h3>Handwashing Motion Classification</h3>
-          <p>A computer-vision model that classifies handwashing motions using Convolutional Neural Networks.</p>
+          <p>A computer-vision system that watches a camera feed and classifies the steps of handwashing, to check whether people wash their hands properly in public places.</p>
           <ul class="p-role">
-            <li>Dataset preparation, CNN training and evaluation</li>
+            <li>EfficientNet-B0 (NoisyStudent) with moving-average smoothing</li>
+            <li>99% training accuracy; 12/12 steps recognized in testing</li>
           </ul>
-          <div class="tags"><span>Computer vision</span><span>CNN</span><span>TensorFlow</span></div>
+          <div class="tags"><span>Computer vision</span><span>CNN</span><span>EfficientNet</span><span>TensorFlow</span></div>
+          <div class="p-actions"><button class="p-more" data-open="cs-thesis">Read case study</button><a class="p-link" href="https://www.neliti.com/publications/501150/klasifikasi-gerakan-cuci-tangan-berbasis-convolutional-neural-network-cnn" target="_blank" rel="noopener">Read the paper ↗</a></div>
         </article>
       </div>
     </section>
@@ -401,6 +411,7 @@
             <p class="t-org">Institut Teknologi Sepuluh Nopember (ITS) · Surabaya</p>
             <ul>
               <li>Focus: Artificial Intelligence, microprocessor &amp; microcontroller systems.</li>
+              <li>Thesis published in <a class="inline-link" href="https://doi.org/10.12962/j23373539.v10i2.75377" target="_blank" rel="noopener">Jurnal Teknik ITS, Vol. 10 No. 2 (2021)</a>: CNN-based handwashing motion classification.</li>
             </ul>
           </div>
         </li>
@@ -632,10 +643,40 @@
     </div>
   </dialog>
 
+
+  <dialog class="cs" id="cs-thesis" aria-labelledby="cs-thesis-t">
+    <div class="cs-inner">
+      <button class="cs-close" aria-label="Close case study">✕</button>
+      <p class="cs-org">Undergraduate thesis · ITS Surabaya · Published in Jurnal Teknik ITS, 2021</p>
+      <h3 id="cs-thesis-t">Handwashing Motion Classification with CNN</h3>
+      <h4>The problem</h4>
+      <p>During the COVID-19 pandemic, many people still washed their hands too quickly or skipped steps, and nobody can watch public sinks 24/7. The goal: use a camera and deep learning to recognize each handwashing step and check whether it was done properly.</p>
+      <h4>How it works</h4>
+      <div class="flow"><span>Handwashing video</span><i>→</i><span>Frame extraction</span><i>→</i><span>Data augmentation</span><i>→</i><span>EfficientNet-B0 classifier</span><i>→</i><span>Moving-average smoothing</span><i>→</i><span>Labeled output video</span></div>
+      <h4>What I did</h4>
+      <ul>
+        <li>Cleaned the public Kaggle Hand Wash Dataset (mislabeled and mixed-motion clips) and extended it with my own recordings using a webcam and a DSLR on new backgrounds.</li>
+        <li>Trained a classifier on EfficientNet-B0 with NoisyStudent weights, with augmentation before the base model.</li>
+        <li>Added moving-average smoothing over frame predictions and tuned the window size to reduce flickering labels.</li>
+        <li>Tested robustness against camera field of view, camera angle and sink background.</li>
+      </ul>
+      <h4>Results</h4>
+      <ul class="results">
+        <li><strong>99%</strong> accuracy in the training phase, above 90% on evaluation in under 20 epochs</li>
+        <li><strong>12/12</strong> handwashing steps recognized in testing, with 2/12 inconsistent predictions</li>
+        <li><strong>2 s</strong> moving-average window gave the best results</li>
+        <li>Limits: a 30° camera angle and unseen backgrounds lowered accuracy, pointing to the need for a more diverse dataset and careful camera placement</li>
+      </ul>
+      <div class="tags"><span>Python</span><span>TensorFlow</span><span>EfficientNet-B0</span><span>Computer vision</span><span>Data augmentation</span></div>
+      <p class="cs-cite">Habibul Rahman Qalbi, Eko Mulyanto Yuniarno, Reza Fuad Rachmadi. <em>Klasifikasi Gerakan Cuci Tangan Berbasis Convolutional Neural Network (CNN)</em>. Jurnal Teknik ITS, 10(2), 2021.</p>
+      <div class="p-actions"><a class="p-link" href="https://www.neliti.com/publications/501150/klasifikasi-gerakan-cuci-tangan-berbasis-convolutional-neural-network-cnn" target="_blank" rel="noopener">Read on Neliti ↗</a><a class="p-link" href="https://doi.org/10.12962/j23373539.v10i2.75377" target="_blank" rel="noopener">DOI ↗</a></div>
+    </div>
+  </dialog>
+
   <footer class="footer">
     <p>© <span id="year">2026</span> Habibul Rahman Qalbi · AI, Backend &amp; Full Stack Engineer · Surabaya, Indonesia</p>
   </footer>
 
-  <script src="main.js?v=fc3b4d8b" defer></script>
+  <script src="main.js?v=2c87e396" defer></script>
 </body>
 </html>
