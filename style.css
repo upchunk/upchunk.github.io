@@ -45,7 +45,8 @@
 }
 
 /* ---------- Base ---------- */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.65; overflow-x: hidden; transition: background 0.3s, color 0.3s; }
 a { color: inherit; text-decoration: none; }
@@ -123,7 +124,7 @@ h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
 .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; border-radius: 999px; font-size: 0.84rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); margin-bottom: 24px; }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 0 rgba(52, 211, 153, .6); animation: pulse 2s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 9px rgba(52, 211, 153, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0); } }
-.hero h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); line-height: 1.08; font-weight: 800; letter-spacing: -0.035em; }
+.hero h1 { font-size: clamp(2rem, 5.2vw, 3.8rem); line-height: 1.08; font-weight: 800; letter-spacing: -0.035em; }
 .accent { color: var(--accent-text); }
 .type-line { display: block; white-space: nowrap; }
 .typed { color: var(--accent-text); }
@@ -398,7 +399,7 @@ body.modal-open { overflow: hidden; }
 /* Fix gradient edge bleed: these elements keep a 1px transparent border, and by default the
    gradient is sized to the padding box and tiled underneath the border, so the opposite end of
    the gradient shows as a thin fringe on each edge. Size it to the border box and don't tile it. */
-.btn.primary, .chip.active, .feat-visual span:last-child, .step-n, .ico, .logo-mark, .avatar {
+.btn.primary, .btn.primary:hover, .chip.active, .feat-visual span:last-child, .step-n, .ico, .logo-mark, .avatar {
   background-origin: border-box;
   background-repeat: no-repeat;
 }
@@ -420,3 +421,31 @@ body.modal-open { overflow: hidden; }
 @media (max-width: 1000px) { .path.highlight .checks { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 860px) { .paths { grid-template-columns: 1fr; } }
 @media (max-width: 700px) { .path.highlight .checks { grid-template-columns: 1fr; } }
+
+/* ---------- Timeline: date sits above each card; dot centred on the line ---------- */
+.timeline > li { grid-template-columns: 1fr; gap: 8px; }
+.timeline > li::before { box-sizing: border-box; left: -28px; top: 3px; }
+
+/* ---------- Layout polish ---------- */
+/* Skills: both extra cards full width, so neither has an empty half */
+.skills-extra { grid-template-columns: 1fr; }
+/* Project meta never breaks mid-date */
+.pl-side .p-org { white-space: nowrap; }
+@media (max-width: 860px) {
+  /* Headline first on small screens, profile card right after it */
+  .profile { order: 0; }
+}
+@media (max-width: 700px) {
+  .pl-side { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .email-box { padding: 16px 12px; }
+  .email-actions { display: grid; grid-template-columns: repeat(3, auto); gap: 6px; }
+  .email-actions .btn { padding: 8px 10px; font-size: 0.8rem; white-space: nowrap; }
+  .intents { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .intent { justify-content: center; padding: 9px 10px; font-size: 0.86rem; }
+  .contact .cta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .contact .cta .btn { justify-content: center; }
+  .contact .cta .btn:first-child { grid-column: 1 / -1; }
+}
+/* Typed headline stays on one line on phones (no reserved blank line) */
+@media (max-width: 700px) { .type-line { white-space: nowrap; min-height: 0; } }
+@media (max-width: 340px) { .hero h1 { font-size: 1.75rem; } }

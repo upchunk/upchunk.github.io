@@ -69,7 +69,7 @@
   navLinks.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
 
   // Typing effect
-  const words = ['AI products', 'AI agents', 'Python backends', 'full stack apps', 'RAG pipelines'];
+  const words = ['AI products', 'AI agents', 'backend APIs', 'full stack apps', 'RAG pipelines'];
   const el = document.getElementById('typed');
   if (!reduce && el) {
     let w = 0, i = words[0].length, deleting = true;
