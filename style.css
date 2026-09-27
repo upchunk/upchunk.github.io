@@ -390,6 +390,13 @@ body.modal-open { overflow: hidden; }
 .avatar { border-color: transparent; background: var(--grad); padding: 3px; }
 .avatar img { border-radius: 50%; }
 .feat-visual span:last-child { background: var(--grad); }
+/* Fix gradient edge bleed: these elements keep a 1px transparent border, and by default the
+   gradient is sized to the padding box and tiled underneath the border, so the opposite end of
+   the gradient shows as a thin fringe on each edge. Size it to the border box and don't tile it. */
+.btn.primary, .chip.active, .feat-visual span:last-child, .step-n, .ico, .logo-mark, .avatar {
+  background-origin: border-box;
+  background-repeat: no-repeat;
+}
 .tags.core span { background: linear-gradient(120deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent-2) 22%, transparent)); color: var(--text); }
 .timeline::before { background: linear-gradient(var(--accent), var(--accent-2), transparent); }
 .checks li::before { border-color: var(--accent-2); }
