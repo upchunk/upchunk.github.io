@@ -382,3 +382,11 @@ h2 .num { margin-right: 12px; vertical-align: 0.35em; }
 .avail { grid-template-columns: repeat(2, 1fr); }
 .note-sm { display: block; margin-top: 6px; font-size: 0.8rem; color: var(--muted); }
 @media (max-width: 700px) { .avail { grid-template-columns: 1fr; } }
+.yt { position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden; background: #000; border: 1px solid var(--card-border); }
+.yt-play { all: unset; position: absolute; inset: 0; cursor: pointer; display: grid; place-items: center; }
+.yt-play img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.yt-btn { position: relative; transition: transform 0.2s, filter 0.2s; filter: drop-shadow(0 4px 12px rgba(0,0,0,.4)); }
+.yt-play:hover .yt-btn, .yt-play:focus-visible .yt-btn { transform: scale(1.1); }
+.yt-play:focus-visible { outline: 2px solid var(--accent-2); outline-offset: -2px; }
+.yt iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.yt-cap { margin-top: 8px; font-size: 0.82rem !important; }

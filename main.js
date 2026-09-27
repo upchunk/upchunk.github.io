@@ -30,6 +30,22 @@
       history.replaceState(null, '', '#projects');
     });
   });
+  // YouTube facade: load the player only when clicked, stop it when the dialog closes
+  document.querySelectorAll('.yt').forEach((box) => {
+    const facade = box.innerHTML;
+    const bind = () => box.querySelector('.yt-play').addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = `https://www.youtube-nocookie.com/embed/${box.dataset.yt}?autoplay=1&rel=0`;
+      f.title = box.dataset.title || 'YouTube video';
+      f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      f.allowFullscreen = true;
+      box.replaceChildren(f);
+    });
+    bind();
+    const dlg = box.closest('dialog');
+    if (dlg) dlg.addEventListener('close', () => { if (box.querySelector('iframe')) { box.innerHTML = facade; bind(); } });
+  });
+
   if (location.hash.startsWith('#cs-')) openDialog(location.hash.slice(1));
 
   // Theme toggle

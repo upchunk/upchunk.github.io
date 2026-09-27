@@ -65,7 +65,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" /></noscript>
-  <link rel="stylesheet" href="style.css?v=bb044cdf" />
+  <link rel="stylesheet" href="style.css?v=79919168" />
   <script>
     document.documentElement.classList.add('js');
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
@@ -338,7 +338,7 @@
             <li>99% training accuracy; 12/12 steps recognized in testing</li>
           </ul>
           <div class="tags"><span>Computer vision</span><span>CNN</span><span>EfficientNet</span><span>TensorFlow</span></div>
-          <div class="p-actions"><button class="p-more" data-open="cs-thesis">Read case study</button><a class="p-link" href="https://www.neliti.com/publications/501150/klasifikasi-gerakan-cuci-tangan-berbasis-convolutional-neural-network-cnn" target="_blank" rel="noopener">Read the paper ↗</a></div>
+          <div class="p-actions"><button class="p-more" data-open="cs-thesis">▶ Case study &amp; demo</button><a class="p-link" href="https://www.neliti.com/publications/501150/klasifikasi-gerakan-cuci-tangan-berbasis-convolutional-neural-network-cnn" target="_blank" rel="noopener">Read the paper ↗</a></div>
         </article>
       </div>
     </section>
@@ -655,6 +655,14 @@
       <p>During the COVID-19 pandemic, many people still washed their hands too quickly or skipped steps, and nobody can watch public sinks 24/7. The goal: use a camera and deep learning to recognize each handwashing step and check whether it was done properly.</p>
       <h4>How it works</h4>
       <div class="flow"><span>Handwashing video</span><i>→</i><span>Frame extraction</span><i>→</i><span>Data augmentation</span><i>→</i><span>EfficientNet-B0 classifier</span><i>→</i><span>Moving-average smoothing</span><i>→</i><span>Labeled output video</span></div>
+      <h4>Demo video</h4>
+      <div class="yt" data-yt="KGmyYTsM0dY" data-title="Klasifikasi Gerakan Cuci Tangan Berbasis CNN">
+        <button class="yt-play" aria-label="Play demo video: handwashing motion classification">
+          <img src="https://i.ytimg.com/vi/KGmyYTsM0dY/maxresdefault.jpg" alt="" loading="lazy" width="1280" height="720" />
+          <span class="yt-btn" aria-hidden="true"><svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="#f00"/><path d="M45 24 27 14v20z" fill="#fff"/></svg></span>
+        </button>
+      </div>
+      <p class="yt-cap">Left: raw input. Right: the predicted handwashing step written on each frame. <a class="inline-link" href="https://youtu.be/KGmyYTsM0dY" target="_blank" rel="noopener">Watch on YouTube ↗</a></p>
       <h4>What I did</h4>
       <ul>
         <li>Cleaned the public Kaggle Hand Wash Dataset (mislabeled and mixed-motion clips) and extended it with my own recordings using a webcam and a DSLR on new backgrounds.</li>
@@ -679,6 +687,6 @@
     <p>© <span id="year">2026</span> Habibul Rahman Qalbi · AI, Backend &amp; Full Stack Engineer · Surabaya, Indonesia</p>
   </footer>
 
-  <script src="main.js?v=bb044cdf" defer></script>
+  <script src="main.js?v=79919168" defer></script>
 </body>
 </html>
