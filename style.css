@@ -250,7 +250,7 @@ h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
 .t-role { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .t-role h4 { font-size: 1rem; }
 .t-role .t-when { font: 500 0.76rem var(--mono); color: var(--muted); margin: 2px 0 6px; }
-.t-note { font-size: 0.84rem; color: var(--muted); font-style: italic; margin-top: 6px; }
+.t-note { font-size: 0.84rem; color: var(--muted); font-style: italic; margin: -4px 0 8px; }
 
 /* ---------- Skills ---------- */
 .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -412,3 +412,11 @@ body.modal-open { overflow: hidden; }
   .blob { animation: none; filter: blur(70px); }
   .section { padding-top: 64px; }
 }
+
+/* ---------- Work with me: three equal cards, custom-AI card full width below ---------- */
+.paths { grid-template-columns: repeat(3, 1fr); }
+.path.highlight { grid-column: 1 / -1; order: 1; }
+.path.highlight .checks { display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 24px; }
+@media (max-width: 1000px) { .path.highlight .checks { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 860px) { .paths { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .path.highlight .checks { grid-template-columns: 1fr; } }
