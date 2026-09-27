@@ -411,3 +411,11 @@ h2 .num { margin-right: 12px; vertical-align: 0.35em; }
   .role-line b { font-size: 0.8rem; padding: 4px 10px; border-radius: 8px; background: var(--chip); color: var(--chip-text); }
   .role-line b + b::before { content: none; }
 }
+.logo { font-family: "Inter", "Inter Fallback", system-ui, sans-serif; font-weight: 700; letter-spacing: -0.01em; font-size: 1rem; white-space: nowrap; }
+.logo-mark { font-family: "JetBrains Mono", "Mono Fallback", monospace; font-size: 0.8rem; flex-shrink: 0; }
+.logo-name .short { display: none; }
+@media (max-width: 1000px) and (min-width: 861px) { .links { gap: 18px; } }
+@media (max-width: 420px) {
+  .logo-name .full { display: none; }
+  .logo-name .short { display: inline; }
+}
