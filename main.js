@@ -5,6 +5,33 @@
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
+  // Years of experience, counted from the first software job (LnData, April 2022)
+  const CAREER_START = new Date(2022, 3, 1);
+  const now = new Date();
+  let yrs = now.getFullYear() - CAREER_START.getFullYear();
+  if (now.getMonth() < CAREER_START.getMonth()) yrs -= 1;
+  document.querySelectorAll('.yrs').forEach((n) => { n.textContent = yrs; });
+  document.querySelectorAll('.yrs-count').forEach((n) => { n.dataset.count = yrs; n.textContent = yrs + '+'; });
+
+  // Case study dialogs
+  const openDialog = (id) => {
+    const d = document.getElementById(id);
+    if (!d || typeof d.showModal !== 'function') return;
+    d.showModal();
+    document.body.classList.add('modal-open');
+    history.replaceState(null, '', '#' + id);
+  };
+  document.querySelectorAll('[data-open]').forEach((b) => b.addEventListener('click', () => openDialog(b.dataset.open)));
+  document.querySelectorAll('dialog.cs').forEach((d) => {
+    d.querySelector('.cs-close').addEventListener('click', () => d.close());
+    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
+    d.addEventListener('close', () => {
+      document.body.classList.remove('modal-open');
+      history.replaceState(null, '', '#projects');
+    });
+  });
+  if (location.hash.startsWith('#cs-')) openDialog(location.hash.slice(1));
+
   // Theme toggle
   const isLight = () =>
     root.dataset.theme ? root.dataset.theme === 'light' : window.matchMedia('(prefers-color-scheme: light)').matches;
