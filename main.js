@@ -132,20 +132,32 @@
     });
   }));
 
-  // Spotlight + tilt on project cards
-  if (!reduce && window.matchMedia('(hover: hover)').matches) {
-    projects.forEach((card) => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const x = e.clientX - r.left, y = e.clientY - r.top;
-        card.style.setProperty('--mx', `${x}px`);
-        card.style.setProperty('--my', `${y}px`);
-        const rx = ((y / r.height) - 0.5) * -6, ry = ((x / r.width) - 0.5) * 6;
-        card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
-      });
-      card.addEventListener('mouseleave', () => { card.style.transform = ''; });
-    });
-  }
+  // Copy email with toast feedback
+  const toast = document.getElementById('toast');
+  let toastTimer;
+  const showToast = (msg) => {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+  };
+  const copyText = async (text) => {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch (err) {}
+      ta.remove(); return ok;
+    }
+  };
+  document.querySelectorAll('.copy-email').forEach((btn) => btn.addEventListener('click', async () => {
+    const ok = await copyText(btn.dataset.email);
+    showToast(ok ? 'Email copied: ' + btn.dataset.email : btn.dataset.email);
+    const label = btn.querySelector('span');
+    if (ok && label) { const prev = label.textContent; label.textContent = 'Copied!'; setTimeout(() => { label.textContent = prev; }, 1800); }
+  }));
 
   // Active nav link via IntersectionObserver (no layout reads on scroll)
   const links = [...navLinks.querySelectorAll('a')];
