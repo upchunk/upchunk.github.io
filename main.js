@@ -14,8 +14,19 @@
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
 
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  const setMenu = (open) => {
+    navLinks.classList.toggle('open', open);
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  };
+  menuBtn.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+  navLinks.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+
   // Typing effect
-  const words = ['agentic AI systems', 'RAG pipelines', 'AI workflow engines', 'scalable Python backends'];
+  const words = ['AI products', 'AI agents', 'Python backends', 'full stack apps', 'RAG pipelines'];
   const el = document.getElementById('typed');
   if (!reduce && el) {
     let w = 0, i = words[0].length, deleting = true;
@@ -23,9 +34,9 @@
       const word = words[w];
       i += deleting ? -1 : 1;
       el.textContent = word.slice(0, i);
-      let delay = deleting ? 45 : 85;
+      let delay = deleting ? 40 : 80;
       if (!deleting && i === word.length) { deleting = true; delay = 1800; }
-      else if (deleting && i === 0) { deleting = false; w = (w + 1) % words.length; delay = 350; }
+      else if (deleting && i === 0) { deleting = false; w = (w + 1) % words.length; delay = 300; }
       setTimeout(tick, delay);
     };
     setTimeout(tick, 2200);
@@ -36,42 +47,43 @@
     entries.forEach((e) => {
       if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach((el) => {
-    const siblings = el.parentElement ? [...el.parentElement.children].filter((c) => c.classList.contains('reveal')) : [];
-    const idx = siblings.indexOf(el);
-    if (idx > 0) el.style.transitionDelay = `${Math.min(idx, 6) * 70}ms`;
-    io.observe(el);
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((node) => {
+    const siblings = node.parentElement ? [...node.parentElement.children].filter((c) => c.classList.contains('reveal')) : [];
+    const idx = siblings.indexOf(node);
+    if (idx > 0) node.style.transitionDelay = `${Math.min(idx, 6) * 70}ms`;
+    io.observe(node);
   });
 
-  // Count-up stats
-  const counters = document.querySelectorAll('[data-count]');
-  const countIO = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (!e.isIntersecting) return;
-      const node = e.target, target = +node.dataset.count, suffix = node.dataset.suffix || '';
-      countIO.unobserve(node);
-      if (reduce) { node.textContent = target + suffix; return; }
-      const start = performance.now(), dur = 1400;
-      const step = (t) => {
-        const p = Math.min((t - start) / dur, 1);
-        node.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
-        if (p < 1) requestAnimationFrame(step);
-      };
-      requestAnimationFrame(step);
-    });
-  }, { threshold: 0.5 });
-  counters.forEach((c) => countIO.observe(c));
+  // Count-up stats (HTML already holds the final value for no-JS / crawlers)
+  if (!reduce) {
+    const countIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const node = e.target, target = +node.dataset.count, suffix = node.dataset.suffix || '';
+        countIO.unobserve(node);
+        const start = performance.now(), dur = 1400;
+        const step = (t) => {
+          const p = Math.min((t - start) / dur, 1);
+          node.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
+          if (p < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-count]').forEach((c) => countIO.observe(c));
+  }
 
-  // Project filters
+  // Project filters (a project can belong to several categories)
   const chips = document.querySelectorAll('.chip');
   const projects = document.querySelectorAll('.project');
   chips.forEach((chip) => chip.addEventListener('click', () => {
-    chips.forEach((c) => c.classList.remove('active'));
+    chips.forEach((c) => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); });
     chip.classList.add('active');
+    chip.setAttribute('aria-pressed', 'true');
     const f = chip.dataset.filter;
     projects.forEach((p) => {
-      const show = f === 'all' || p.dataset.cat === f;
+      const show = f === 'all' || p.dataset.cat.split(' ').includes(f);
       p.classList.toggle('hidden', !show);
       if (show) p.classList.add('in');
     });
@@ -92,17 +104,29 @@
     });
   }
 
-  // Scroll progress + active nav link
+  // Active nav link via IntersectionObserver (no layout reads on scroll)
+  const links = [...navLinks.querySelectorAll('a')];
+  const byId = new Map(links.map((a) => [a.getAttribute('href').slice(1), a]));
+  const secIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      links.forEach((a) => a.classList.remove('active'));
+      const a = byId.get(e.target.id);
+      if (a) a.classList.add('active');
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  byId.forEach((_, id) => { const s = document.getElementById(id); if (s) secIO.observe(s); });
+
+  // Scroll progress bar
   const bar = document.querySelector('.progress');
-  const navLinks = [...document.querySelectorAll('.links a')];
-  const sections = navLinks.map((a) => document.querySelector(a.getAttribute('href')));
-  const onScroll = () => {
-    const h = document.documentElement.scrollHeight - innerHeight;
-    bar.style.width = `${h > 0 ? (scrollY / h) * 100 : 0}%`;
-    let current = -1;
-    sections.forEach((s, i) => { if (s && s.getBoundingClientRect().top < innerHeight * 0.4) current = i; });
-    navLinks.forEach((a, i) => a.classList.toggle('active', i === current));
-  };
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      const h = root.scrollHeight - innerHeight;
+      bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
+      ticking = false;
+    });
+  }, { passive: true });
 })();

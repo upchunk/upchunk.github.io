@@ -12,6 +12,8 @@ Plain HTML, CSS and vanilla JavaScript. No build step, so GitHub Pages serves it
 index.html        # content
 style.css         # styles, dark/light theme, animations
 main.js           # typing effect, scroll reveal, project filters, theme toggle
+og.png            # social preview image (LinkedIn, WhatsApp, X)
+robots.txt, sitemap.xml  # search engine indexing
 ```
 
 ## Confidentiality
