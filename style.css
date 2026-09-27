@@ -1,5 +1,6 @@
+/* Inter (variable, Latin subset) is self-hosted: no third-party request, OFL licence in fonts/OFL-Inter.txt */
+@font-face { font-family: "Inter"; src: url("fonts/inter-var-latin.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
 @font-face { font-family: "Inter Fallback"; src: local("Arial"), local("Liberation Sans"), local("Helvetica"); size-adjust: 107.4%; ascent-override: 90.2%; descent-override: 22.5%; line-gap-override: 0%; }
-@font-face { font-family: "Mono Fallback"; src: local("Courier New"), local("Liberation Mono"), local("Menlo"); size-adjust: 100%; ascent-override: 102%; descent-override: 30%; line-gap-override: 0%; }
 
 /* ---------- Tokens ---------- */
 :root {
@@ -21,7 +22,7 @@
   --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
   --blob: 0.45;
   --sans: "Inter", "Inter Fallback", system-ui, -apple-system, sans-serif;
-  --mono: "JetBrains Mono", "Mono Fallback", ui-monospace, monospace;
+  --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", "Segoe UI Mono", Menlo, Consolas, "Liberation Mono", monospace;
   color-scheme: dark;
 }
 :root[data-theme="light"] {
@@ -246,6 +247,10 @@ h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.01em; }
 .t-org { color: var(--accent-text); font-size: 0.88rem; margin: 2px 0 10px; }
 .t-body ul li { color: var(--muted); font-size: 0.92rem; position: relative; padding-left: 16px; margin: 5px 0; }
 .t-body ul li::before { content: "•"; position: absolute; left: 0; color: var(--accent); }
+.t-role { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.t-role h4 { font-size: 1rem; }
+.t-role .t-when { font: 500 0.76rem var(--mono); color: var(--muted); margin: 2px 0 6px; }
+.t-note { font-size: 0.84rem; color: var(--muted); font-style: italic; margin-top: 6px; }
 
 /* ---------- Skills ---------- */
 .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
@@ -401,3 +406,9 @@ body.modal-open { overflow: hidden; }
 .timeline::before { background: linear-gradient(var(--accent), var(--accent-2), transparent); }
 .checks li::before { border-color: var(--accent-2); }
 .intent .i, .email-box .i.big { color: var(--accent-2); }
+
+/* ---------- Mobile: lighter background, shorter page ---------- */
+@media (max-width: 860px) {
+  .blob { animation: none; filter: blur(70px); }
+  .section { padding-top: 64px; }
+}
