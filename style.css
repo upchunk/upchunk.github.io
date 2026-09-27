@@ -356,3 +356,23 @@ body.modal-open { overflow: hidden; }
   .flow { flex-direction: column; align-items: stretch; }
   .flow i { text-align: center; transform: rotate(90deg); }
 }
+
+/* v3.1: cleaner work-with-me layout */
+.paths { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+.path { padding: 26px 28px; gap: 10px; }
+.path-top { justify-content: flex-start; gap: 12px; margin-bottom: 2px; }
+.path-icon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; font-size: 1.2rem; background: var(--chip); }
+.path h3 { font-size: 1.2rem; }
+.path.featured .checks.tight { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; }
+.path-cta { padding-top: 8px; }
+@media (max-width: 1024px) { .paths { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 700px) {
+  .paths { grid-template-columns: 1fr; }
+  .path.featured .checks.tight { grid-template-columns: 1fr; }
+}
+h2 { display: block; }
+h2 .num { margin-right: 12px; vertical-align: 0.35em; }
+.contact h2 { text-align: center; }
+.p-actions .p-link { align-self: center; }
+.project .tags { margin-top: auto; }
+.timeline::before { top: 14px; }
