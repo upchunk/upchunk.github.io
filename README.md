@@ -1,6 +1,6 @@
 # upchunk.github.io
 
-Personal portfolio of **Habibul Rahman Qalbi (Habi)**, AI / LLM Engineer based in Surabaya, Indonesia.
+Personal portfolio of **Habibul Rahman Qalbi (Habi)**, AI Engineer based in Surabaya, Indonesia.
 
 Live: https://upchunk.github.io
 
