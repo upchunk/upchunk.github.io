@@ -9,9 +9,10 @@ Live: https://upchunk.github.io
 Plain HTML, CSS and vanilla JavaScript. No build step, so GitHub Pages serves it directly.
 
 ```
-index.html        # content + inlined CSS (dark/light theme, layout, animations)
-main.js           # typing effect, scroll reveal, project filters, theme toggle
+index.html        # content + inlined CSS (light/dark theme, layout, figures)
+main.js           # figure bar animation, inline case-study deep links, theme toggle, copy email
 og.png            # social preview image (LinkedIn, WhatsApp, X)
+fonts/            # self-hosted Schibsted Grotesk (OFL)
 robots.txt, sitemap.xml  # search engine indexing
 avatar.jpg/.webp  # profile photo
 Habibul_Rahman_Qalbi_CV.pdf  # public CV (no phone number or client names)

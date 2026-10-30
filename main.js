@@ -1,6 +1,5 @@
 (() => {
   const root = document.documentElement;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // Year
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -11,26 +10,21 @@
   let yrs = now.getFullYear() - CAREER_START.getFullYear();
   if (now.getMonth() < CAREER_START.getMonth()) yrs -= 1;
   document.querySelectorAll('.yrs').forEach((n) => { n.textContent = yrs; });
-  document.querySelectorAll('.yrs-count').forEach((n) => { n.dataset.count = yrs; n.textContent = yrs + '+'; });
 
-  // Case study dialogs
-  const openDialog = (id) => {
+  // Case studies are inline <details>; old #cs-* links open and scroll to them
+  const openCase = (id) => {
     const d = document.getElementById(id);
-    if (!d || typeof d.showModal !== 'function') return;
-    d.showModal();
-    document.body.classList.add('modal-open');
-    history.replaceState(null, '', '#' + id);
+    if (!d || d.tagName !== 'DETAILS') return;
+    d.open = true;
+    (d.closest('.chapter') || d).scrollIntoView({ block: 'start', behavior: 'instant' });
   };
-  document.querySelectorAll('[data-open]').forEach((b) => b.addEventListener('click', () => openDialog(b.dataset.open)));
-  document.querySelectorAll('dialog.cs').forEach((d) => {
-    d.querySelector('.cs-close').addEventListener('click', () => d.close());
-    d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
-    d.addEventListener('close', () => {
-      document.body.classList.remove('modal-open');
-      history.replaceState(null, '', '#projects');
-    });
-  });
-  // YouTube facade: load the player only when clicked, stop it when the dialog closes
+  if (location.hash.startsWith('#cs-')) openCase(location.hash.slice(1));
+  addEventListener('hashchange', () => { if (location.hash.startsWith('#cs-')) openCase(location.hash.slice(1)); });
+  document.querySelectorAll('details[id^="cs-"]').forEach((d) => d.addEventListener('toggle', () => {
+    if (d.open) history.replaceState(null, '', '#' + d.id);
+  }));
+
+  // YouTube facade: load the player only when clicked, stop it when its case study closes
   document.querySelectorAll('.yt').forEach((box) => {
     const facade = box.innerHTML;
     const bind = () => box.querySelector('.yt-play').addEventListener('click', () => {
@@ -42,17 +36,25 @@
       box.replaceChildren(f);
     });
     bind();
-    const dlg = box.closest('dialog');
-    if (dlg) dlg.addEventListener('close', () => { if (box.querySelector('iframe')) { box.innerHTML = facade; bind(); } });
+    const d = box.closest('details');
+    if (d) d.addEventListener('toggle', () => { if (!d.open && box.querySelector('iframe')) { box.innerHTML = facade; bind(); } });
   });
 
-  if (location.hash.startsWith('#cs-')) openDialog(location.hash.slice(1));
+  // Figures: result bars grow from zero once the figure is on screen
+  const figIO = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('drawn');
+      figIO.unobserve(e.target);
+    });
+  }, { rootMargin: '0px 0px -20% 0px' }); // any visible part above the bottom fifth counts, so tall figures on phones still draw
+  document.querySelectorAll('.fig.draw').forEach((f) => figIO.observe(f));
 
   // Theme toggle
-  const isLight = () =>
-    root.dataset.theme ? root.dataset.theme === 'light' : window.matchMedia('(prefers-color-scheme: light)').matches;
+  const isDark = () =>
+    root.dataset.theme ? root.dataset.theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   document.getElementById('themeToggle').addEventListener('click', () => {
-    const next = isLight() ? 'dark' : 'light';
+    const next = isDark() ? 'light' : 'dark';
     root.dataset.theme = next;
     try { localStorage.setItem('theme', next); } catch (e) {}
   });
@@ -68,75 +70,10 @@
   menuBtn.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
   navLinks.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
 
-  // Typing effect
-  const words = ['AI products', 'AI agents', 'backend APIs', 'full stack apps', 'RAG pipelines'];
-  const el = document.getElementById('typed');
-  if (!reduce && el) {
-    let w = 0, i = words[0].length, deleting = true;
-    const tick = () => {
-      const word = words[w];
-      i += deleting ? -1 : 1;
-      el.textContent = word.slice(0, i);
-      let delay = deleting ? 40 : 80;
-      if (!deleting && i === word.length) { deleting = true; delay = 1800; }
-      else if (deleting && i === 0) { deleting = false; w = (w + 1) % words.length; delay = 300; }
-      setTimeout(tick, delay);
-    };
-    setTimeout(tick, 2200);
-  }
-
-  // Reveal on scroll + stagger
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((e) => {
-      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach((node) => {
-    const siblings = node.parentElement ? [...node.parentElement.children].filter((c) => c.classList.contains('reveal')) : [];
-    const idx = siblings.indexOf(node);
-    if (idx > 0) node.style.transitionDelay = `${Math.min(idx, 6) * 70}ms`;
-    io.observe(node);
-  });
-
-  // Count-up stats (HTML already holds the final value for no-JS / crawlers)
-  if (!reduce) {
-    const countIO = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        const node = e.target, target = +node.dataset.count, suffix = node.dataset.suffix || '';
-        countIO.unobserve(node);
-        const start = performance.now(), dur = 1400;
-        const step = (t) => {
-          const p = Math.min((t - start) / dur, 1);
-          node.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
-          if (p < 1) requestAnimationFrame(step);
-        };
-        requestAnimationFrame(step);
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('[data-count]').forEach((c) => countIO.observe(c));
-  }
-
-  // Project filters (a project can belong to several categories)
-  const chips = document.querySelectorAll('.chip');
-  const projects = document.querySelectorAll('.project');
-  chips.forEach((chip) => chip.addEventListener('click', () => {
-    chips.forEach((c) => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); });
-    chip.classList.add('active');
-    chip.setAttribute('aria-pressed', 'true');
-    const f = chip.dataset.filter;
-    projects.forEach((p) => {
-      const show = f === 'all' || p.dataset.cat.split(' ').includes(f);
-      p.classList.toggle('hidden', !show);
-      if (show) p.classList.add('in');
-    });
-  }));
-
   // Copy email with toast feedback
   const toast = document.getElementById('toast');
   let toastTimer;
   const showToast = (msg) => {
-    if (!toast) return;
     toast.textContent = msg;
     toast.classList.add('show');
     clearTimeout(toastTimer);
@@ -171,17 +108,4 @@
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
   byId.forEach((_, id) => { const s = document.getElementById(id); if (s) secIO.observe(s); });
-
-  // Scroll progress bar
-  const bar = document.querySelector('.progress');
-  let ticking = false;
-  addEventListener('scroll', () => {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const h = root.scrollHeight - innerHeight;
-      bar.style.transform = `scaleX(${h > 0 ? scrollY / h : 0})`;
-      ticking = false;
-    });
-  }, { passive: true });
 })();
